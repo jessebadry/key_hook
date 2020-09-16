@@ -1,4 +1,5 @@
-use crate::inputs;
+mod inputs;
+
 use futures::executor::ThreadPool;
 use lazy_static::lazy_static;
 use std::mem::MaybeUninit;
@@ -105,11 +106,11 @@ unsafe extern "system" fn hook_callback(code: i32, w_param: u64, l_param: i64) -
 fn hook_keyboard_t() {
     hook_keyboard(|key| match key {
         Key::KeyDown(key) => {
-            println!("Key = {}", key); 
+            println!("Key = {}", key);
         }
         Key::KeyUp(key) => {
             println!("Key = {}", key);
         }
+        _ => {}
     });
 }
-
