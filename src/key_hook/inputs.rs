@@ -115,6 +115,20 @@ pub const TAB: &str = "tab";
 pub const SHIFT: &str = "shift";
 pub const CAPS_LOCK: &str = "caps_lock";
 pub const TILDE: &str = "~";
+fn get_key_offset(key: u32) -> u32 {
+    match key {
+        50 => 64,
+        51 => 35,
+        52 => 36,
+        53 => 37,
+        54 => 94,
+        55 => 38,
+        56 => 42,
+        57 => 40,
+        48 => 41,
+        _ => 0,
+    }
+}
 
 pub fn vk_to_string(mut key_code: u32, with_shift: bool) -> String {
     let result: &str = match key_code {
@@ -123,24 +137,22 @@ pub fn vk_to_string(mut key_code: u32, with_shift: bool) -> String {
         0xA0 => SHIFT,
         0x14 => CAPS_LOCK,
         0x20 => " ",
-        0x30..=0x5A => "convert",
+        32..=126 => "convert",
+        65..=90 => "convert",
+        97..=122 => "convert",
         0xC0 => TILDE,
         0x0D => ENTER_KEY,
         /* TODO: IMPLEMENT ALL KEYS */
         _ => "Unknown",
     };
-    //Turn nums to special character when shift is activated, 
+    //Turn nums to special character when shift is activated,
     // '(' and ')' cannot be converted  by an offset of 16, so is sperately checked.
-    let ascii_offset = if with_shift && (key_code >= 49 && key_code <= 56) {
-        16
-    } else if with_shift && key_code == 48 {
-        7
-    } else if with_shift && key_code == 57 {
-        17
+    
+    key_code = if with_shift && (key_code == 48 || (key_code >= 50 && key_code <= 57)) {
+        get_key_offset(key_code)
     } else {
-        0
+        key_code
     };
-    key_code = key_code - ascii_offset;
     if result == "Unknown" {
         return format!("uknown_key, raw_code: {}", key_code);
     } else if result == "convert" {
@@ -150,3 +162,4 @@ pub fn vk_to_string(mut key_code: u32, with_shift: bool) -> String {
 
     result.into()
 }
+
