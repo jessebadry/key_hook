@@ -34,13 +34,8 @@ async fn start_hook<F: FnMut(Key) + Send + 'static>(call: F) {
         {
             let capped = user32::GetKeyState(20);
             let shift_key_toggled = user32::GetKeyState(160);
-            SHIFT_TOGGLED
-                .lock()
-                .and_then(|mut shift| {
-                    *shift = shift_key_toggled < 0;
-                    Ok(())
-                })
-                .unwrap_or_else(|e| panic!("Could not convert to shifted letter."));
+            *SHIFT_TOGGLED.lock().unwrap() = shift_key_toggled < 0;
+
             *CAPITALIZED.lock().unwrap() = capped == 1;
 
             // println!("i = {}", capped);
