@@ -137,11 +137,9 @@ pub fn vk_to_string(mut key_code: u32, with_shift: bool) -> String {
         0xA0 => SHIFT,
         0x14 => CAPS_LOCK,
         0x20 => " ",
-        32..=126 => "convert",
-        65..=90 => "convert",
-        97..=122 => "convert",
         0xC0 => TILDE,
         0x0D => ENTER_KEY,
+        32..=126 => "convert",
         /* TODO: IMPLEMENT ALL KEYS */
         _ => "Unknown",
     };
